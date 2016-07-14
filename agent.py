@@ -6,11 +6,14 @@ import schedule
 import simplejson
 import time
 
+
 def get_client():
     return Client(base_url='unix://var/run/docker.sock')
 
+
 def get_backend_url():
     return os.getenv('DOCKER_AGENT_BACKEND', "http://backend:3000")
+
 
 def send_container_list():
     containers = get_client().containers()
@@ -21,9 +24,9 @@ def send_container_list():
     response = requests.post(url, data=simplejson.dumps(data))
     container_names = [c["Image"] for c in containers]
     print("[{timestamp}] {response} {containers}".format(
-        timestamp = datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S"),
-        response = response.status_code,
-        containers = ','.join(container_names)
+        timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S"),
+        response=response.status_code,
+        containers=','.join(container_names)
     ))
 
 send_container_list()
