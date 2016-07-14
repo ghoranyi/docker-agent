@@ -1,0 +1,4 @@
+docker-py
+requests
+simplejson
+schedule
