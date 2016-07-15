@@ -20,27 +20,26 @@ def get_backend_port():
 
 
 def send_container_list():
-    containers = get_client().containers()
-    url = "{backend}:{port}/api/docker_stats".format(backend=get_backend_url(), port=get_backend_port())
-    data = {
-        "containers": containers
-    }
-    response = requests.post(url, data=simplejson.dumps(data))
-    container_names = [c["Image"] for c in containers]
-    print("[{timestamp}] {response} {containers}".format(
-        timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S"),
-        response=response.status_code,
-        containers=','.join(container_names)
-    ))
+    try:
+        containers = get_client().containers()
+        url = "{backend}:{port}/api/docker_stats".format(backend=get_backend_url(), port=get_backend_port())
+        data = {
+            "containers": containers
+        }
+        response = requests.post(url, data=simplejson.dumps(data))
+        container_names = [c["Image"] for c in containers]
+        print("[{timestamp}] {response} {containers}".format(
+            timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S"),
+            response=response.status_code,
+            containers=','.join(container_names)
+        ))
+    except:
+        print("[{timestamp}] FAILED to send data.".format(
+            timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S")))
 
 send_container_list()
 schedule.every().minute.do(send_container_list)
 
 while True:
-    try:
-        schedule.run_pending()
-        time.sleep(1)
-    except:
-        print("[{timestamp}] FAILED to send data,".format(
-            timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S")))
-        time.sleep(10)
+    schedule.run_pending()
+    time.sleep(1)
