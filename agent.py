@@ -19,10 +19,26 @@ def get_backend_port():
     return os.getenv('DOCKER_AGENT_BACKEND_PORT', "8878")
 
 
-def send_container_list():
+def register_node():
+    while True:
+        try:
+            url = "{backend}:{port}/containers/api/register".format(backend=get_backend_url(), port=get_backend_port())
+            response = requests.get(url)
+            if response.status_code == 200:
+                return response.text
+            raise Exception()
+        except:
+            print("Failed to register node. Retry in 10s.")
+            time.sleep(10)
+
+
+def send_container_list(node_id):
     try:
         containers = get_client().containers()
-        url = "{backend}:{port}/api/docker_stats".format(backend=get_backend_url(), port=get_backend_port())
+        url = "{backend}:{port}/containers/api/snapshot/{node}/".format(
+            backend=get_backend_url(),
+            port=get_backend_port(),
+            node=node_id)
         data = {
             "containers": containers
         }
@@ -37,8 +53,9 @@ def send_container_list():
         print("[{timestamp}] FAILED to send data.".format(
             timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S")))
 
+node_id = register_node()
 send_container_list()
-schedule.every().minute.do(send_container_list)
+schedule.every().minute.do(send_container_list, node_id=node_id)
 
 while True:
     schedule.run_pending()
