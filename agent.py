@@ -12,12 +12,16 @@ def get_client():
 
 
 def get_backend_url():
-    return os.getenv('DOCKER_AGENT_BACKEND', "http://backend:3000")
+    return os.getenv('DOCKER_AGENT_BACKEND_URL', "http://backend")
+
+
+def get_backend_port():
+    return os.getenv('DOCKER_AGENT_BACKEND_PORT', "8878")
 
 
 def send_container_list():
     containers = get_client().containers()
-    url = "{backend}/api/docker_stats".format(backend=get_backend_url())
+    url = "{backend}:{port}/api/docker_stats".format(backend=get_backend_url(), port=get_backend_port())
     data = {
         "containers": containers
     }
