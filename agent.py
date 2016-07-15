@@ -37,5 +37,10 @@ send_container_list()
 schedule.every().minute.do(send_container_list)
 
 while True:
-    schedule.run_pending()
-    time.sleep(1)
+    try:
+        schedule.run_pending()
+        time.sleep(1)
+    except:
+        print("[{timestamp}] FAILED to send data,".format(
+            timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S")))
+        time.sleep(10)
