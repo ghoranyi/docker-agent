@@ -6,6 +6,7 @@ import requests
 import schedule
 import simplejson
 import time
+import uuid
 
 
 log = logging.getLogger("dockeragent")
@@ -27,7 +28,10 @@ def get_backend_port():
 def register_node():
     while True:
         try:
-            url = "{backend}:{port}/containers/api/register".format(backend=get_backend_url(), port=get_backend_port())
+            url = "{backend}:{port}/containers/api/register/{uuid}".format(
+                backend=get_backend_url(),
+                port=get_backend_port(),
+                uuid=uuid.uuid1())
             response = requests.get(url)
             if response.status_code == 200:
                 log.info("Node registered, id: {txt}".format(txt=response.text))
