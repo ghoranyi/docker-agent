@@ -1,0 +1,37 @@
+*.py[cod]
+*.pyc
+__pycache__
+.cache
+
+# django
+staticfiles/
+
+# project
+output
+
+# Logs
+*.log
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+*.pot
+
+# Pycharm
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*~
+*.swp
+*.swo
+*.swn
+
+# OS
+.DS_Store
