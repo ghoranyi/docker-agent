@@ -1,71 +1,36 @@
-import datetime
-from docker import Client
-import logging
-import os
-import requests
+# -*- coding: utf-8 -*-
+"""
+Agent has two main responsibilities:
+    1. Constantly gather containers information and send it to backend
+    2. Start packet beat for each of the containers that expose http or redis port(s)
+
+Agent recognizes following environment variables:
+    DOCKER_AGENT_BACKEND_URL                Address of 'container-storage' backend
+    DOCKER_AGENT_BACKEND_PORT               Port of 'container-storage' backend
+    DOCKER_AGENT_DUMMY_BACKEND              If true, then we don't connect to remote backend
+    DOCKER_AGENT_SKIP_PACKETBEAT            If true, there will be no Packetbeat setup/monitoring
+    DOCKER_AGENT_PACKETBEAT_IMAGE           Name of the Packetbeat image, default is 'pipetop/docker-agent-pb'
+    DOCKER_AGENT_ELASTIC_SEARCH_ADDRESS     Elastic search address for Packetbeat to connect to (<host:port>)
+    DOCKER_AGENT_MONITOR_HTTP_PORTS         List of http ports that Packetbeat instances will capture
+"""
 import schedule
-import simplejson
 import time
 import uuid
 
+import logging
+from backend import get_backend
+from packetbeat import manage_packetbeat
 
 log = logging.getLogger("dockeragent")
 logging.basicConfig(level=logging.INFO)
 
+backend = get_backend()
+backend.register_node()
 
-def get_client():
-    return Client(base_url='unix://var/run/docker.sock')
-
-
-def get_backend_url():
-    return os.getenv('DOCKER_AGENT_BACKEND_URL', "http://backend")
-
-
-def get_backend_port():
-    return os.getenv('DOCKER_AGENT_BACKEND_PORT', "8878")
-
-
-def register_node():
-    while True:
-        try:
-            url = "{backend}:{port}/containers/api/register/{uuid}".format(
-                backend=get_backend_url(),
-                port=get_backend_port(),
-                uuid=uuid.uuid1())
-            response = requests.get(url)
-            if response.status_code == 200:
-                log.info("Node registered, id: {txt}".format(txt=response.text))
-                return response.text
-            raise Exception()
-        except:
-            log.warn("Failed to register node. Retry in 10s.")
-            time.sleep(10)
-
-
-def send_container_list(node_id):
-    try:
-        containers = get_client().containers()
-        url = "{backend}:{port}/containers/api/snapshot/{node}/".format(
-            backend=get_backend_url(),
-            port=get_backend_port(),
-            node=node_id)
-        data = {
-            "containers": containers
-        }
-        response = requests.post(url, data=simplejson.dumps(data))
-        container_names = [c["Image"] for c in containers]
-        log.info("[{timestamp}] {response} {containers}".format(
-            timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S"),
-            response=response.status_code,
-            containers=','.join(container_names)
-        ))
-    except:
-        log.warn("[{timestamp}] FAILED to send data.".format(
-            timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S")))
-
-node_id = register_node()
-
-schedule.every().minute.do(send_container_list, node_id=node_id)
+# .run() is added to force scheduler to start the task right away, otherwise we have to wait
+# for 30 seconds for first execution
+schedule.every(30).seconds.do(backend.send_container_list).run()
+schedule.every(60).seconds.do(manage_packetbeat).run()
 
 while True:
     schedule.run_pending()
