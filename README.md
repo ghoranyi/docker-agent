@@ -9,6 +9,7 @@ Docker agent recognizes following env variables:
     DOCKER_AGENT_SKIP_PACKETBEAT            If true, there will be no Packetbeat setup/monitoring
     DOCKER_AGENT_PACKETBEAT_IMAGE           Name of the Packetbeat image, default is 'pipetop/docker-agent-pb'
     DOCKER_AGENT_ELASTIC_SEARCH_ADDRESS     Elastic search address for Packetbeat to connect to (<host:port>)
+    DOCKER_AGENT_LOGSTASH_ADDRESS           Logstash address for Packetbeat to connect to (<host:port>)
     DOCKER_AGENT_MONITOR_HTTP_PORTS         List of http ports that Packetbeat instances will capture
 ```
 

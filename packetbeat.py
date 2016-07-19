@@ -44,6 +44,7 @@ def manage_packetbeat():
                     host_config=host_config,
                     environment={
                         'ES_ADDRESS': os.getenv('DOCKER_AGENT_ELASTIC_SEARCH_ADDRESS'),
+                        'LOGSTASH_ADDRESS': os.getenv('DOCKER_AGENT_LOGSTASH_ADDRESS'),
                         'MONITOR_HTTP_PORTS': get_http_monitor_ports()
                     },
                     command="./start-pb.sh",
