@@ -7,7 +7,6 @@ import time
 import simplejson
 import datetime
 from util import docker_client, env_true
-import uuid
 
 log = logging.getLogger("dockeragent")
 
@@ -35,7 +34,7 @@ class RemoteBackend(object):
                 url = "{backend}:{port}/containers/api/register/{node_id}".format(
                     backend=self.backend_url,
                     port=self.backend_port,
-                    node_id=uuid.uuid1())
+                    node_id=str(uuid.uuid1()))
                 response = requests.get(url)
                 if response.status_code == 200:
                     log.info("Node registered, id: {txt}".format(txt=response.text))
