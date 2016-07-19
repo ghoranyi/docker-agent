@@ -18,11 +18,18 @@ import time
 import uuid
 
 import logging
+import signal
 from backend import get_backend
 from packetbeat import manage_packetbeat
 
 log = logging.getLogger("dockeragent")
 logging.basicConfig(level=logging.INFO)
+
+
+def handler(signum, frame):
+    exit(0)
+
+signal.signal(signal.SIGINT, handler)
 
 backend = get_backend()
 backend.register_node()
