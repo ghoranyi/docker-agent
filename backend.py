@@ -89,7 +89,11 @@ def get_networks(dc, cids):
             if container_id in cids:
                 if container_id not in networks:
                     networks[container_id] = {"hostname": hostnames.get(container_id), "networks": {}}
-                networks[container_id]["networks"][network["Name"]] = net_info
+                data = {
+                    "Name": network["Name"]
+                }
+                data.update(net_info)
+                networks[container_id]["networks"][network["Id"]] = data
     return networks
 
 
