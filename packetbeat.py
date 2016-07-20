@@ -74,7 +74,7 @@ def _source_container_id(container):
 
 
 def get_packetbeat_image_name():
-    return os.getenv('DOCKER_AGENT_PACKETBEAT_IMAGE', 'docker-agent-pb')
+    return os.getenv('DOCKER_AGENT_PACKETBEAT_IMAGE', 'pipetop/docker-agent-pb')
 
 
 def get_http_monitor_ports():
