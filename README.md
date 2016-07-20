@@ -3,6 +3,7 @@
 Docker agent recognizes following env variables:
 
 ```
+    DOCKER_AGENT_IMAGE                      Name of the Agent image, default is 'pipetop/docker-agent'
     DOCKER_AGENT_BACKEND_URL                Address of 'container-storage' backend
     DOCKER_AGENT_BACKEND_PORT               Port of 'container-storage' backend
     DOCKER_AGENT_DUMMY_BACKEND              If true, then we don't connect to remote backend

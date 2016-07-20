@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
-from util import docker_client, env_true
+from util import docker_client, env_true, get_packetbeat_image_name
 
 log = logging.getLogger("dockeragent")
 
@@ -71,10 +71,6 @@ def _source_container_id(container):
     if ':' in net_mode:
         return net_mode.split(':')[1]
     return None
-
-
-def get_packetbeat_image_name():
-    return os.getenv('DOCKER_AGENT_PACKETBEAT_IMAGE', 'pipetop/docker-agent-pb')
 
 
 def get_http_monitor_ports():

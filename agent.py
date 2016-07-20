@@ -5,6 +5,7 @@ Agent has two main responsibilities:
     2. Start packet beat for each of the containers that expose http or redis port(s)
 
 Agent recognizes following environment variables:
+    DOCKER_AGENT_IMAGE                      Name of the Agent image, default is 'pipetop/docker-agent'
     DOCKER_AGENT_BACKEND_URL                Address of 'container-storage' backend
     DOCKER_AGENT_BACKEND_PORT               Port of 'container-storage' backend
     DOCKER_AGENT_DUMMY_BACKEND              If true, then we don't connect to remote backend
@@ -16,7 +17,6 @@ Agent recognizes following environment variables:
 """
 import schedule
 import time
-import uuid
 
 import logging
 import signal
@@ -38,7 +38,7 @@ backend.register_node()
 # .run() is added to force scheduler to start the task right away, otherwise we have to wait
 # for 30 seconds for first execution
 schedule.every(30).seconds.do(backend.send_container_list).run()
-schedule.every(60).seconds.do(manage_packetbeat).run()
+schedule.every(15).seconds.do(manage_packetbeat).run()
 
 while True:
     schedule.run_pending()
