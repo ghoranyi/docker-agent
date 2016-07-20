@@ -19,3 +19,15 @@ Example run command with dummy backend:
 ```
 docker run -e DOCKER_AGENT_DUMMY_BACKEND=1 -e DOCKER_AGENT_ELASTIC_SEARCH_ADDRESS=192.168.99.100:9200 -v /var/run/docker.sock:/var/run/docker.sock docker_agent
 ```
+
+Example run command in aws (has to be run on specific node, not through swarm connection):
+
+```
+docker run -d \
+    -e DOCKER_AGENT_PACKETBEAT_IMAGE=pipetop/docker-agent-pb \
+    -e DOCKER_AGENT_BACKEND_URL=http://backend-2129167539.eu-west-1.elb.amazonaws.com \
+    -e DOCKER_AGENT_BACKEND_PORT=80 \
+    -e DOCKER_AGENT_LOGSTASH_ADDRESS=52.208.120.22:22711 \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    pipetop/docker-agent
+```

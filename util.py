@@ -18,7 +18,7 @@ def get_agent_image_name():
 def get_project_image_names():
     # Get the image names of this project, which can be useful in scenarios, when we want to do something on
     # every container except fot agent or packet beat containers.
-    return [get_agent_image_name(), get_packetbeat_image_name()] 
+    return [get_agent_image_name(), get_packetbeat_image_name()]
 
 
 def env_true(name, default_value):
