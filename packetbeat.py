@@ -20,6 +20,7 @@ def manage_packetbeat():
             if not source_container or 'running' not in source_container.get("State", {}).get("Status"):
                 log.info("Stopping packet beat %s, because its source container is not running", pbc.get("Id"))
                 dc.stop(container=pbc.get("Id"))
+                dc.remove_container(container=pbc.get("Id"))
 
     # Get a list of containers and check each of them if they expose ports that we want.
     # Those that do will be paired with Packetbeat instance
