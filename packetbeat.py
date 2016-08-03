@@ -38,6 +38,10 @@ def manage_packetbeat():
                 cid = c.get("Id")
                 log.info("Starting packetbeat for container %s with id %s, because it exposes port %s",
                          c.get("Image"), cid, matching_port)
+                # will pull the image if it doesn't exist yet or is not the latest version
+                for line in dc.pull('{}:latest'.format(get_packetbeat_image_name()), stream=True):
+                    log.debug(line)
+
                 host_config = dc.create_host_config(network_mode='container:' + cid)
                 packet_beat = dc.create_container(
                     image=get_packetbeat_image_name(),
