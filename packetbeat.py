@@ -26,6 +26,7 @@ def manage_packetbeat():
     # Those that do will be paired with Packetbeat instance
     magic_ports = [int(x) for x in get_http_monitor_ports().split(',') + ['6379']]
     already_attached_ids = get_source_container_ids(dc=dc)
+    pulled = False
     for c in dc.containers():
         if c.get("Id") in already_attached_ids:
             continue
@@ -39,9 +40,11 @@ def manage_packetbeat():
                 cid = c.get("Id")
                 log.info("Starting packetbeat for container %s with id %s, because it exposes port %s",
                          c.get("Image"), cid, matching_port)
-                # will pull the image if it doesn't exist yet or is not the latest version
-                for line in dc.pull('{}:latest'.format(get_packetbeat_image_name()), stream=True):
-                    log.debug(line)
+                if not pulled:
+                    # will pull the image if it doesn't exist yet or is not the latest version
+                    for line in dc.pull('{}:latest'.format(get_packetbeat_image_name()), stream=True):
+                        log.debug(line)
+                    pulled = True
 
                 host_config = dc.create_host_config(network_mode='container:' + cid)
                 packet_beat = dc.create_container(
