@@ -86,7 +86,7 @@ def get_networks(dc, cids):
     hostnames = get_hostnames(dc, cids)
 
     for network in dc.networks():
-        for container_id, net_info in network.get("Containers", {}).iteritems():
+        for container_id, net_info in (network.get("Containers") or {}).iteritems():
             if container_id in cids:
                 if container_id not in networks:
                     networks[container_id] = {"hostname": hostnames.get(container_id), "networks": {}}
