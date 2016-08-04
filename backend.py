@@ -69,7 +69,8 @@ class RemoteBackend(object):
                 response=response.status_code,
                 containers=get_container_names(containers)
             ))
-        except:
+        except Exception as e:
+            log.exception(e)
             log.warn("[{timestamp}] FAILED to send data.".format(
                 timestamp=datetime.datetime.utcnow().strftime("%Y:%m:%d %H:%M:%S")))
 
