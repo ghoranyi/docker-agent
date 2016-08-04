@@ -24,7 +24,7 @@ def manage_packetbeat():
 
     # Get a list of containers and check each of them if they expose ports that we want.
     # Those that do will be paired with Packetbeat instance
-    magic_ports = [int(x) for x in get_http_monitor_ports().split(',') + ['6379']]
+    magic_ports = [int(x) for x in get_http_monitor_ports().split(',') + ['6379', '3306', '5432']]
     already_attached_ids = get_source_container_ids(dc=dc)
     pulled = False
     for c in dc.containers():
