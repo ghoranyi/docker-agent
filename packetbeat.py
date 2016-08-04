@@ -51,7 +51,7 @@ def manage_packetbeat():
                     image=get_packetbeat_image_name(),
                     host_config=host_config,
                     environment={
-                        'ES_ADDRESS': os.getenv('DOCKER_AGENT_ELASTIC_SEARCH_ADDRESS'),
+                        'ES_ADDRESS': os.getenv('DOCKER_AGENT_ELASTIC_SEARCH_ADDRESS', 'vizdemo-backend:9200'),
                         'LOGSTASH_ADDRESS': os.getenv('DOCKER_AGENT_LOGSTASH_ADDRESS'),
                         'MONITOR_HTTP_PORTS': get_http_monitor_ports()
                     },
@@ -82,7 +82,7 @@ def _source_container_id(container):
 
 
 def get_http_monitor_ports():
-    return os.getenv('DOCKER_AGENT_MONITOR_HTTP_PORTS', '80, 8000, 8001, 8080')
+    return os.getenv('DOCKER_AGENT_MONITOR_HTTP_PORTS', '80, 5000, 5001, 8000, 8001, 8080')
 
 
 def _inspect_container(client, cid):

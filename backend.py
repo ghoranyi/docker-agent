@@ -31,7 +31,7 @@ class DummyBackend(object):
 
 class RemoteBackend(object):
     def __init__(self):
-        self.backend_url = os.getenv('DOCKER_AGENT_BACKEND_URL', "http://backend")
+        self.backend_url = os.getenv('DOCKER_AGENT_BACKEND_URL', "http://vizdemo-backend")
         self.backend_port = os.getenv('DOCKER_AGENT_BACKEND_PORT', "8878")
 
     def register_node(self):
