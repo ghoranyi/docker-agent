@@ -42,13 +42,13 @@ class RemoteBackend(object):
                     port=self.backend_port,
                     node_id=str(uuid.uuid1()))
                 response = requests.get(url)
-                if response.status_code == 200:
-                    log.info("Node registered, id: {txt}".format(txt=response.text))
-                    self.node_id = response.text
-                    return self.node_id
-                raise Exception()
-            except:
-                log.warn("Failed to register node. Retry in 10s.")
+                response.raise_for_status()
+
+                log.info("Node registered, id: {txt}".format(txt=response.text))
+                self.node_id = response.text
+                return self.node_id
+            except Exception as e:
+                log.warn("Failed to register node: {}. Retry in 10s.".format(e))
                 time.sleep(10)
 
     def send_container_list(self):
