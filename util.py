@@ -8,11 +8,11 @@ def docker_client():
 
 
 def get_packetbeat_image_name():
-    return os.getenv('DOCKER_AGENT_PACKETBEAT_IMAGE', 'pipetop/docker-agent-pb')
+    return os.getenv('DOCKER_AGENT_PACKETBEAT_IMAGE', 'ghoranyi/docker-agent-pb')
 
 
 def get_agent_image_name():
-    return os.getenv('DOCKER_AGENT_IMAGE', 'pipetop/docker-agent')
+    return os.getenv('DOCKER_AGENT_IMAGE', 'ghoranyi/docker-agent')
 
 
 def get_project_image_names():
