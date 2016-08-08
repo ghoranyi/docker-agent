@@ -82,7 +82,7 @@ def _source_container_id(container):
 
 
 def get_http_monitor_ports():
-    return os.getenv('DOCKER_AGENT_MONITOR_HTTP_PORTS', '80, 5000, 5001, 8000, 8001, 8080')
+    return os.getenv('DOCKER_AGENT_MONITOR_HTTP_PORTS', '80, 5000, 5001, 8000, 8001')
 
 
 def _inspect_container(client, cid):
