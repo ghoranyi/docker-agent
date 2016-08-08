@@ -5,12 +5,12 @@ Agent has two main responsibilities:
     2. Start packet beat for each of the containers that expose http or redis port(s)
 
 Agent recognizes following environment variables:
-    DOCKER_AGENT_IMAGE                      Name of the Agent image, default is 'pipetop/docker-agent'
+    DOCKER_AGENT_IMAGE                      Name of the Agent image, default is 'ghoranyi/docker-agent'
     DOCKER_AGENT_BACKEND_URL                Address of 'container-storage' backend
     DOCKER_AGENT_BACKEND_PORT               Port of 'container-storage' backend
     DOCKER_AGENT_DUMMY_BACKEND              If true, then we don't connect to remote backend
     DOCKER_AGENT_SKIP_PACKETBEAT            If true, there will be no Packetbeat setup/monitoring
-    DOCKER_AGENT_PACKETBEAT_IMAGE           Name of the Packetbeat image, default is 'pipetop/docker-agent-pb'
+    DOCKER_AGENT_PACKETBEAT_IMAGE           Name of the Packetbeat image, default is 'ghoranyi/docker-agent-pb'
     DOCKER_AGENT_ELASTIC_SEARCH_ADDRESS     Elastic search address for Packetbeat to connect to (<host:port>)
     DOCKER_AGENT_LOGSTASH_ADDRESS           Logstash address for Packetbeat to connect to (<host:port>)
     DOCKER_AGENT_MONITOR_HTTP_PORTS         List of http ports that Packetbeat instances will capture
